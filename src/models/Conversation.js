@@ -13,9 +13,11 @@ const ConversationSchema = new mongoose.Schema(
   {
     phone: { type: String, required: true, unique: true },
     state: { type: String, default: 'MENU' },
+    waitingHuman: { type: Boolean, default: false },
     messages: [MessageSchema]
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model('Conversation', ConversationSchema);
+

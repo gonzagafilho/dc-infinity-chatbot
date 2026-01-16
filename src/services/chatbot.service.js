@@ -1,3 +1,14 @@
+function isBusinessHours() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Dom, 6=Sáb
+  const hour = now.getHours();
+
+  if (day === 0 || day === 6) return false;
+  if (hour < 8 || hour >= 17) return false;
+
+  return true;
+}
+
 const Conversation = require('../models/Conversation');
 
 const GREETINGS = ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite'];
@@ -72,8 +83,18 @@ function handleMenu(conversation, text) {
   }
 
   if (text === '4') {
-    return '👨‍💼 Vou te encaminhar para um atendente.';
+  if (isBusinessHours()) {
+    conversation.waitingHuman = true;
+    return '👨‍💼 Um atendente irá te atender em instantes.';
+  } else {
+    return `
+⏰ Nosso atendimento humano funciona:
+Segunda a Sexta, das 08h às 17h.
+
+📩 Deixe sua mensagem que responderemos no próximo horário.
+`;
   }
+}
 
   if (text === '5') {
     return '📍 Informe seu bairro para verificar cobertura.\nDigite 0️⃣ para voltar.';
